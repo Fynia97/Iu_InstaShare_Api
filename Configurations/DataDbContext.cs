@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Iu_InstaShare_Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Iu_InstaShare_Api.Configurations
 {
@@ -18,6 +19,8 @@ namespace Iu_InstaShare_Api.Configurations
         }
 
         //For every model: public DbSet<ADDTYPE> ADDNAME { get; set; }
+
+        public DbSet<BookModel> Books { get; set; }
 
     }
 }
