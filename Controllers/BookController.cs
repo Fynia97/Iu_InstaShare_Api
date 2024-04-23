@@ -66,7 +66,12 @@ namespace Iu_InstaShare_Api.Controllers
                 return BadRequest();
             }
 
-            bookToChange.Name = entity.Name;
+            bookToChange.ISBN = entity.ISBN;
+            bookToChange.Title = entity.Title;
+            bookToChange.Author = entity.Author;
+            bookToChange.Publisher = entity.Publisher;
+            bookToChange.PublishingYear = entity.PublishingYear;
+            bookToChange.UpdatedAt = DateTime.Now;
 
             _context.Books.Update(bookToChange);
             _context.SaveChanges();
