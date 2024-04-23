@@ -11,7 +11,7 @@ namespace Iu_InstaShare_Api.Models
 
         public bool Active { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.Today;
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; } = null;
 
         [Required]
         [EmailAddress]
