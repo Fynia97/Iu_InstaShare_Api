@@ -8,8 +8,6 @@ namespace Iu_InstaShare_Api.Configurations
     {
         public DataDbContext() { }
 
-        //JUST A TEST !!! 
-
         public DataDbContext(DbContextOptions<DataDbContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
