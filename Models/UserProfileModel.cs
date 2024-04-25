@@ -9,7 +9,10 @@ namespace Iu_InstaShare_Api.Models
         public string LastName { get; set; } = "";
         public string Password { get; set; } = "";
 
-        public bool Active { get; set; } = false;
+        public string Street { get; set; } = "";
+        public string Zip { get; set; } = "";
+        public string City { get; set; } = "";
+
         public DateTime CreatedAt { get; set; } = DateTime.Today;
         public DateTime? UpdatedAt { get; set; } = null;
 

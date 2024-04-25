@@ -57,7 +57,9 @@ namespace Iu_InstaShare_Api.Controllers
             userProfileToChange.LastName = entity.LastName;
             userProfileToChange.Email = entity.Email;
             userProfileToChange.Password = entity.Password;
-            userProfileToChange.Active = entity.Active;
+            userProfileToChange.Street = entity.Street;
+            userProfileToChange.Zip = entity.Zip;
+            userProfileToChange.City = entity.City;
             userProfileToChange.UpdatedAt = DateTime.Now;
 
             _context.UserProfiles.Update(userProfileToChange);
