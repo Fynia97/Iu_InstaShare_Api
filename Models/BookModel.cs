@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Iu_InstaShare_Api.Models
+﻿namespace Iu_InstaShare_Api.Models
 {
     public class BookModel
     {
@@ -12,5 +10,6 @@ namespace Iu_InstaShare_Api.Models
         public DateTime? PublishingYear { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Today;
         public DateTime? UpdatedAt { get; set; } = null;
+        public bool LendOut { get; set; } = false;
     }
 }

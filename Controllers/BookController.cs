@@ -1,6 +1,7 @@
 ﻿using Iu_InstaShare_Api.Configurations;
 using Iu_InstaShare_Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace Iu_InstaShare_Api.Controllers
 {
@@ -71,6 +72,7 @@ namespace Iu_InstaShare_Api.Controllers
             bookToChange.Author = entity.Author;
             bookToChange.Publisher = entity.Publisher;
             bookToChange.PublishingYear = entity.PublishingYear;
+            bookToChange.LendOut = entity.LendOut;
             bookToChange.UpdatedAt = DateTime.Now;
 
             _context.Books.Update(bookToChange);
@@ -88,6 +90,17 @@ namespace Iu_InstaShare_Api.Controllers
             if (bookToDelete == null)
             {
                 return BadRequest();
+            }
+
+            var lendsOfBook = _context.Lends.Where(x => x.Book.Id == bookToDelete.Id).ToList();
+
+            if (lendsOfBook != null)
+            {
+                foreach(LendModel element in lendsOfBook)
+                {
+                    _context.Lends.Remove(element);
+                    _context.SaveChanges();
+                }
             }
 
             _context.Books.Remove(bookToDelete);

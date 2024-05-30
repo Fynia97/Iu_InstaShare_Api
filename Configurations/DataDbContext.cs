@@ -21,6 +21,7 @@ namespace Iu_InstaShare_Api.Configurations
         //For every model: public DbSet<ADDTYPE> ADDNAME { get; set; }
 
         public DbSet<BookModel> Books { get; set; }
+        public DbSet<LendModel> Lends { get; set; }
         public DbSet<UserProfileModel> UserProfiles { get; set; }
 
     }
