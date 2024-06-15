@@ -1,6 +1,4 @@
 ﻿using Iu_InstaShare_Api.DTO;
-using Iu_InstaShare_Api.DTOs;
-using Iu_InstaShare_Api.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Iu_InstaShare_Api.Models
@@ -10,11 +8,7 @@ namespace Iu_InstaShare_Api.Models
         public int Id { get; set; }
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
-        //public string Password { get; set; } = "";
-
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-
+        public string Password { get; set; } = "";
 
         public string Street { get; set; } = "";
         public string Zip { get; set; } = "";
@@ -27,15 +21,6 @@ namespace Iu_InstaShare_Api.Models
         [EmailAddress]
         public string Email { get; set; } = "";
         public virtual ICollection<FriendsModel>? Friends { get; set; }
-
-        public static UserProfileDto ToDto(UserProfileModel model, ITokenService tokenService)
-        {
-            return new UserProfileDto
-            {
-                Email = model.Email,
-                Token = tokenService.CreateToken(model)
-            };
-        }
     }
 }
 
