@@ -1,6 +1,5 @@
 ﻿using Iu_InstaShare_Api.Configurations;
 using Iu_InstaShare_Api.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +7,6 @@ namespace Iu_InstaShare_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class UserProfileController : ControllerBase
     {
         private readonly DataDbContext _context;
@@ -41,18 +39,6 @@ namespace Iu_InstaShare_Api.Controllers
             return Ok(userProfileById);
         }
 
-        [HttpGet("getByEmail")]
-        public async Task<ActionResult<UserProfileModel>> getByEmail(string email)
-        {
-            var userProfileByEmail = await _context.UserProfiles
-                .FirstOrDefaultAsync(i => i.Email == email);
-
-            if (userProfileByEmail == null)
-                return BadRequest();
-
-            return Ok(userProfileByEmail);
-        }
-
         //TODO: Auch Sonderzeichen erlauben
         [HttpPost("create")]
         public ActionResult<UserProfileModel> create(UserProfileModel entity)
@@ -82,7 +68,7 @@ namespace Iu_InstaShare_Api.Controllers
             userProfileToChange.FirstName = entity.FirstName;
             userProfileToChange.LastName = entity.LastName;
             userProfileToChange.Email = entity.Email;
-            //userProfileToChange.Password = entity.Password;
+            userProfileToChange.Password = entity.Password;
             userProfileToChange.Street = entity.Street;
             userProfileToChange.Zip = entity.Zip;
             userProfileToChange.City = entity.City;

@@ -58,7 +58,7 @@ namespace Iu_InstaShare_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("Iu_InstaShare_Api.Models.FriendsModel", b =>
@@ -86,7 +86,7 @@ namespace Iu_InstaShare_Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Friends");
+                    b.ToTable("Friends", (string)null);
                 });
 
             modelBuilder.Entity("Iu_InstaShare_Api.Models.LendModel", b =>
@@ -128,7 +128,7 @@ namespace Iu_InstaShare_Api.Migrations
 
                     b.HasIndex("BorrowerId");
 
-                    b.ToTable("Lends");
+                    b.ToTable("Lends", (string)null);
                 });
 
             modelBuilder.Entity("Iu_InstaShare_Api.Models.UserProfileModel", b =>
@@ -158,13 +158,9 @@ namespace Iu_InstaShare_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Street")
                         .IsRequired()
@@ -179,7 +175,7 @@ namespace Iu_InstaShare_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
             modelBuilder.Entity("Iu_InstaShare_Api.Models.FriendsModel", b =>
