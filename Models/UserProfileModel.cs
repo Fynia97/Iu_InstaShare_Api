@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Iu_InstaShare_Api.DTO;
+using System.ComponentModel.DataAnnotations;
 
 namespace Iu_InstaShare_Api.Models
 {
@@ -19,5 +20,7 @@ namespace Iu_InstaShare_Api.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; } = "";
+        public virtual ICollection<FriendsModel>? Friends { get; set; }
     }
 }
+

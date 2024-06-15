@@ -4,6 +4,7 @@ using Iu_InstaShare_Api.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Iu_InstaShare_Api.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class DataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611133117_AddFriends")]
+    partial class AddFriends
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace Iu_InstaShare_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("Iu_InstaShare_Api.Models.FriendsModel", b =>
@@ -73,9 +76,6 @@ namespace Iu_InstaShare_Api.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnOrder(0);
@@ -86,7 +86,7 @@ namespace Iu_InstaShare_Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Friends", (string)null);
+                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("Iu_InstaShare_Api.Models.LendModel", b =>
@@ -128,7 +128,7 @@ namespace Iu_InstaShare_Api.Migrations
 
                     b.HasIndex("BorrowerId");
 
-                    b.ToTable("Lends", (string)null);
+                    b.ToTable("Lends");
                 });
 
             modelBuilder.Entity("Iu_InstaShare_Api.Models.UserProfileModel", b =>
@@ -175,7 +175,7 @@ namespace Iu_InstaShare_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserProfiles", (string)null);
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Iu_InstaShare_Api.Models.FriendsModel", b =>

@@ -1,7 +1,6 @@
 ﻿using Iu_InstaShare_Api.Configurations;
 using Iu_InstaShare_Api.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
 
 namespace Iu_InstaShare_Api.Controllers
 {
@@ -96,7 +95,7 @@ namespace Iu_InstaShare_Api.Controllers
 
             if (lendsOfBook != null)
             {
-                foreach(LendModel element in lendsOfBook)
+                foreach (LendModel element in lendsOfBook)
                 {
                     _context.Lends.Remove(element);
                     _context.SaveChanges();

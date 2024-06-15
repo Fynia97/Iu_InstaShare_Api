@@ -1,6 +1,7 @@
 ﻿using Iu_InstaShare_Api.Configurations;
 using Iu_InstaShare_Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Iu_InstaShare_Api.Controllers
 {
@@ -13,6 +14,17 @@ namespace Iu_InstaShare_Api.Controllers
         public UserProfileController(DataDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("getAll")]
+        public ActionResult<UserProfileModel> getAll()
+        {
+            var userProfiles = _context.UserProfiles.ToList();
+
+            if (userProfiles == null)
+                return BadRequest();
+
+            return Ok(userProfiles);
         }
 
         [HttpGet("getById")]
