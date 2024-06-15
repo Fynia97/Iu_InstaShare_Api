@@ -1,6 +1,7 @@
 ﻿using Iu_InstaShare_Api.Configurations;
 using Iu_InstaShare_Api.DTO;
 using Iu_InstaShare_Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace Iu_InstaShare_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class FriendsController : ControllerBase
     {
         private readonly DataDbContext _context;
