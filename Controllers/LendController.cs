@@ -1,5 +1,6 @@
 ﻿using Iu_InstaShare_Api.Configurations;
 using Iu_InstaShare_Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
@@ -9,6 +10,7 @@ namespace Iu_InstaShare_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class LendController : ControllerBase
     {
         private readonly DataDbContext _context;
@@ -41,6 +43,29 @@ namespace Iu_InstaShare_Api.Controllers
                 return BadRequest();
 
             return Ok(lendById);
+        }
+
+        [HttpGet("getNextLendFrom")]
+        public ActionResult<LendModel> getNextLendFrom()
+        {
+            var nextLendFrom = _context.Lends
+            .Where(x => x.LendFrom >= DateTime.Now)
+            .OrderBy(y => y.LendFrom)
+            .FirstOrDefault();
+
+            if (nextLendFrom == null)
+                return BadRequest();
+
+            return Ok(nextLendFrom);
+        }
+
+        [HttpGet("countLendsWithStatus")]
+        public ActionResult<int> countLendsWithStatus(int status)
+        {
+            var countLendsWithStatus = _context.Lends
+            .Count(x => x.LendStatus == (LendStatusEnum)status);
+
+            return Ok(countLendsWithStatus);
         }
 
         [HttpPost("create")]
