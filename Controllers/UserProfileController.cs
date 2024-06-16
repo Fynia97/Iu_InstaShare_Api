@@ -8,7 +8,7 @@ namespace Iu_InstaShare_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UserProfileController : ControllerBase
     {
         private readonly DataDbContext _context;
