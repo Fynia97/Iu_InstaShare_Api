@@ -1,4 +1,6 @@
-﻿namespace Iu_InstaShare_Api.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Iu_InstaShare_Api.DTOs
 {
     public class RegisterDto
     {

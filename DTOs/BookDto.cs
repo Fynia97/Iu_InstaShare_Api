@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Iu_InstaShare_Api.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Iu_InstaShare_Api.Models
+namespace Iu_InstaShare_Api.DTOs
 {
-    public class BookModel
+    public class BookDto
     {
         public int Id { get; set; }
         public string ISBN { get; set; } = "";
@@ -17,6 +18,6 @@ namespace Iu_InstaShare_Api.Models
 
         [ForeignKey("UserId")]
         public int UserId { get; set; } = 0;
-        public BookCategoryEnum Category { get; set; } = 0;
+        public string Category { get; set; } = "";
     }
 }

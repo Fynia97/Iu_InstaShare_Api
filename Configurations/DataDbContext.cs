@@ -35,6 +35,12 @@ namespace Iu_InstaShare_Api.Configurations
             .HasForeignKey(f => f.FriendId)
             .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<BookModel>()
+            .HasOne(f => f.User)
+            .WithMany()
+            .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         }
 
         //For every model: public DbSet<ADDTYPE> ADDNAME { get; set; }

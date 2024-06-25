@@ -10,7 +10,6 @@ namespace Iu_InstaShare_Api.Models
         public int Id { get; set; }
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
-        //public string Password { get; set; } = "";
 
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
@@ -20,7 +19,7 @@ namespace Iu_InstaShare_Api.Models
         public string Zip { get; set; } = "";
         public string City { get; set; } = "";
 
-        public DateTime CreatedAt { get; set; } = DateTime.Today;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = null;
 
         [Required]

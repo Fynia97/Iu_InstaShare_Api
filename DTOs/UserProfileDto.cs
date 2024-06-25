@@ -1,4 +1,7 @@
-﻿namespace Iu_InstaShare_Api.DTOs
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+namespace Iu_InstaShare_Api.DTOs
 {
     public class UserProfileDto
     {
