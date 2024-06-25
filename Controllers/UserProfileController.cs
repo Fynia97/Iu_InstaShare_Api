@@ -53,7 +53,6 @@ namespace Iu_InstaShare_Api.Controllers
             return Ok(userProfileByEmail);
         }
 
-        //TODO: Auch Sonderzeichen erlauben
         [HttpPost("create")]
         public ActionResult<UserProfileModel> create(UserProfileModel entity)
         {
@@ -68,7 +67,6 @@ namespace Iu_InstaShare_Api.Controllers
             return Ok(entity);
         }
 
-        //TODO: Auch Sonderzeichen erlauben
         [HttpPost("update")]
         public ActionResult<UserProfileModel> update(UserProfileModel entity)
         {
@@ -82,7 +80,6 @@ namespace Iu_InstaShare_Api.Controllers
             userProfileToChange.FirstName = entity.FirstName;
             userProfileToChange.LastName = entity.LastName;
             userProfileToChange.Email = entity.Email;
-            //userProfileToChange.Password = entity.Password;
             userProfileToChange.Street = entity.Street;
             userProfileToChange.Zip = entity.Zip;
             userProfileToChange.City = entity.City;
