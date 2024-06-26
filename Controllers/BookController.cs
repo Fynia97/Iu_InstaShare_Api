@@ -4,6 +4,8 @@ using Iu_InstaShare_Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Iu_InstaShare_Api.Controllers
 {
@@ -20,18 +22,15 @@ namespace Iu_InstaShare_Api.Controllers
         }
 
         [HttpGet("getAll")]
-        public ActionResult<List<BookModel>> getAll()
+        public ActionResult<List<BookDto>> getAll()
         {
             var books = _context.Books
                 .Include(x => x.User)
                 .ToList();
 
-            if (books == null)
-            {
-                return BadRequest();
-            }
+            var booksToGet = MapBookModelToBookDto(books);
 
-            return Ok(books);
+            return Ok(booksToGet);
         }
 
         [HttpGet("getAllByUserId")]
@@ -42,7 +41,9 @@ namespace Iu_InstaShare_Api.Controllers
                 .Where(x => x.UserId == userId)
                 .ToList();
 
-            return Ok(books);
+            var booksToGet = MapBookModelToBookDto(books);
+
+            return Ok(booksToGet);
         }
 
         [HttpGet("getById")]
@@ -55,7 +56,22 @@ namespace Iu_InstaShare_Api.Controllers
             if (bookById == null)
                 return BadRequest();
 
-            return Ok(bookById);
+            var bookToGet = new BookDto
+            {
+                Id = bookById.Id,
+                ISBN = bookById.ISBN,
+                Title = bookById.Title,
+                Author = bookById.Author,
+                Publisher = bookById.Publisher,
+                PublishingYear = bookById.PublishingYear,
+                CreatedAt = bookById.CreatedAt,
+                UpdatedAt = bookById.UpdatedAt,
+                LendOut = bookById.LendOut,
+                UserId = bookById.UserId,
+                Category = bookById.Category.ToString()
+            };
+
+            return Ok(bookToGet);
         }
 
         [HttpPost("create")]
@@ -147,5 +163,30 @@ namespace Iu_InstaShare_Api.Controllers
         {
             return (BookCategoryEnum)Enum.Parse(typeof(BookCategoryEnum), bookCategory);
         }
+
+        public List<BookDto> MapBookModelToBookDto(List<BookModel> bookModels)
+        {
+            var bookDtos = new List<BookDto>();
+            foreach (var element in bookModels)
+            {
+                var bookDto = new BookDto
+                {
+                    Id = element.Id,
+                    ISBN = element.ISBN,
+                    Title = element.Title,
+                    Author = element.Author,
+                    Publisher = element.Publisher,
+                    PublishingYear = element.PublishingYear,
+                    CreatedAt = element.CreatedAt,
+                    UpdatedAt = element.UpdatedAt,
+                    LendOut = element.LendOut,
+                    UserId = element.UserId,
+                    Category = element.Category.ToString()
+                };
+                bookDtos.Add(bookDto);
+            }
+            return bookDtos;
+        }
+
     }
 }
