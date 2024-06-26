@@ -20,52 +20,31 @@ namespace Iu_InstaShare_Api.Controllers
             _context = context;
         }
 
-        [HttpGet("getAll")]
-        public ActionResult<List<LendModel>> getAll()
+        [HttpGet("getAllByUserId")]
+        public ActionResult<List<LendModel>> getAllByUserId(int userId)
         {
             var lends = _context.Lends
                 .Include(x => x.Borrower)
                 .Include(x => x.Book)
+                .Where(x => x.Book.UserId == userId || x.Borrower.Id == userId)
                 .ToList();
 
             return Ok(lends);
         }
 
-        [HttpGet("getById")]
-        public ActionResult<LendModel> getById(int id)
+        [HttpGet("getByIdAndUserId")]
+        public ActionResult<LendModel> getByIdAndUserId(int id, int userId)
         {
             var lendById = _context.Lends
                 .Include(x => x.Borrower)
                 .Include(x => x.Book)
+                .Where(x => x.Book.UserId == userId || x.Borrower.Id == userId)
                 .FirstOrDefault(i => i.Id == id);
 
             if (lendById == null)
                 return BadRequest();
 
             return Ok(lendById);
-        }
-
-        [HttpGet("getNextLendFrom")]
-        public ActionResult<LendModel> getNextLendFrom()
-        {
-            var nextLendFrom = _context.Lends
-            .Where(x => x.LendFrom >= DateTime.Now)
-            .OrderBy(y => y.LendFrom)
-            .FirstOrDefault();
-
-            if (nextLendFrom == null)
-                return BadRequest();
-
-            return Ok(nextLendFrom);
-        }
-
-        [HttpGet("countLendsWithStatus")]
-        public ActionResult<int> countLendsWithStatus(int status)
-        {
-            var countLendsWithStatus = _context.Lends
-            .Count(x => x.LendStatus == (LendStatusEnum)status);
-
-            return Ok(countLendsWithStatus);
         }
 
         [HttpPost("create")]
@@ -85,7 +64,10 @@ namespace Iu_InstaShare_Api.Controllers
         [HttpPost("update")]
         public ActionResult<LendModel> update(LendModel entity)
         {
-            var bookToChange = _context.Lends.Find(entity.Id);
+            var bookToChange = _context.Lends
+                .Include(x => x.Borrower)
+                .Include(x => x.Book)
+                .FirstOrDefault(i => i.Id == entity.Id);
 
             if (bookToChange == null)
             {
@@ -120,6 +102,32 @@ namespace Iu_InstaShare_Api.Controllers
             _context.SaveChanges();
 
             return Ok();
+        }
+
+        [HttpGet("getNextLendFrom")]
+        public ActionResult<LendModel> getNextLendFrom(int userId)
+        {
+            var nextLendFrom = _context.Lends
+            .Include(x => x.Borrower)
+            .Where(x => x.LendFrom >= DateTime.Now && x.Borrower.Id == userId)
+            .OrderBy(y => y.LendFrom)
+            .FirstOrDefault();
+
+            if (nextLendFrom == null)
+                return Ok();
+
+            return Ok(nextLendFrom);
+        }
+
+        [HttpGet("countLendsWithStatus")]
+        public ActionResult<int> countLendsWithStatus(int status, int userId)
+        {
+            var countLendsWithStatus = _context.Lends
+                .Include(x => x.Borrower)
+                .Where(x => x.Borrower.Id == userId)
+                .Count(x => x.LendStatus == (LendStatusEnum)status);
+
+            return Ok(countLendsWithStatus);
         }
     }
 }

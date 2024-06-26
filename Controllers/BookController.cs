@@ -4,8 +4,6 @@ using Iu_InstaShare_Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Iu_InstaShare_Api.Controllers
 {
@@ -19,35 +17,6 @@ namespace Iu_InstaShare_Api.Controllers
         public BookController(DataDbContext context)
         {
             _context = context;
-        }
-
-        [HttpGet("getAll")]
-        public ActionResult<List<BookDto>> getAll()
-        {
-            var books = _context.Books
-                .Include(x => x.User)
-                .ToList();
-
-            var bookDtos = new List<BookDto>();
-            foreach (var element in books)
-            {
-                var bookDto = new BookDto
-                {
-                    Id = element.Id,
-                    ISBN = element.ISBN,
-                    Title = element.Title,
-                    Author = element.Author,
-                    Publisher = element.Publisher,
-                    PublishingYear = element.PublishingYear,
-                    CreatedAt = element.CreatedAt,
-                    UpdatedAt = element.UpdatedAt,
-                    LendOut = element.LendOut,
-                    UserId = element.UserId,
-                    Category = element.Category.ToString()
-                };
-                bookDtos.Add(bookDto);
-            }
-            return Ok(bookDtos);
         }
 
         [HttpGet("getAllByUserId")]
@@ -80,11 +49,12 @@ namespace Iu_InstaShare_Api.Controllers
             return Ok(bookDtos);
         }
 
-        [HttpGet("getById")]
-        public ActionResult<BookModel> getById(int id)
+        [HttpGet("getByIdAndUserId")]
+        public ActionResult<BookModel> getByIdAndUserId(int id, int userId)
         {
             var bookById = _context.Books
                 .Include(x => x.User)
+                .Where(x => x.UserId == userId)
                 .FirstOrDefault(i => i.Id == id);
 
             if (bookById == null)
@@ -140,7 +110,9 @@ namespace Iu_InstaShare_Api.Controllers
         [HttpPost("update")]
         public ActionResult<BookModel> update(BookDto entity)
         {
-            var bookToChange = _context.Books.Find(entity.Id);
+            var bookToChange = _context.Books
+                .Include(x => x.User)
+                .FirstOrDefault(i => i.Id == entity.Id);
 
             if (bookToChange == null)
             {
@@ -156,7 +128,7 @@ namespace Iu_InstaShare_Api.Controllers
             bookToChange.PublishingYear = entity.PublishingYear;
             bookToChange.LendOut = entity.LendOut;
             bookToChange.UpdatedAt = DateTime.Now;
-            bookToChange.User = entity.User;
+            bookToChange.UserId = entity.UserId;
             bookToChange.Category = category;
 
             _context.Books.Update(bookToChange);

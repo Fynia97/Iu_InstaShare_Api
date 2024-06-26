@@ -19,12 +19,32 @@ namespace Iu_InstaShare_Api.Controllers
             _context = context;
         }
 
-        [HttpGet("getAll")]
-        public ActionResult<IEnumerable<FriendsDto>> getAll()
+        [HttpGet("getAllPossibleFriends")]
+        public ActionResult<IEnumerable<FriendsDto>> getAllPossibleFriends(int userId)
+        {
+            var possibleFriendsList = _context.UserProfiles
+                .Where(x => x.Id != userId)
+                .ToList();
+
+            var allMyFriendsId = _context.Friends
+                .Where(x => x.UserId == userId)
+                .Select(x => x.FriendId)
+                .ToList();
+
+            var notMyFriends = possibleFriendsList
+                .Where(x => allMyFriendsId.Contains(x.Id) == false)
+                .ToList();
+
+            return Ok(notMyFriends);
+        }
+
+        [HttpGet("getAllByUserId")]
+        public ActionResult<IEnumerable<FriendsDto>> getAllByUserId(int userId)
         {
             var friendsList = _context.Friends
             .Include(x => x.Friend)
             .Include(x => x.User)
+            .Where(x => x.UserId == userId)
             .ToList();
 
             var friendsDtoList = friendsList.Select(f => FriendsModel.ToDto(f)).ToList();
@@ -32,30 +52,13 @@ namespace Iu_InstaShare_Api.Controllers
             return Ok(friendsDtoList);
         }
 
-        /*
-        [HttpGet("getAll")]
-        public ActionResult<FriendsDto> getAll()
-        {
-            return Ok(_context.Friends.Include(x => x.Friend)
-                .Include(x => x.User).ToList());
-            var friendsByUserId = _context.UserProfiles
-                .Include(x => x.Friends)
-                .FirstOrDefault(i => i.Id == id);
-
-            if (friendsByUserId == null)
-                return BadRequest();
-
-            return Ok(friendsByUserId);
-            
-        }
-        */
-
-        [HttpGet("getById")]
-        public ActionResult<FriendsModel> getById(int id)
+        [HttpGet("getByIdAndUserId")]
+        public ActionResult<FriendsModel> getByIdAndUserId(int id, int userId)
         {
             var friendsById = _context.Friends
                 .Include(x => x.Friend)
                 .Include(x => x.User)
+                .Where(x => x.UserId == userId)
                 .FirstOrDefault(i => i.Id == id);
 
             if (friendsById == null)
@@ -79,20 +82,19 @@ namespace Iu_InstaShare_Api.Controllers
         }
 
         [HttpDelete("deleteById")]
-        public ActionResult<FriendsModel> deleteById(int id)
+        public ActionResult<FriendsModel> deleteById(int friendId, int userId)
         {
             var friendsToDelete = _context.Friends
                 .Include(x => x.User)
                 .Include(x => x.Friend)
-                .FirstOrDefault(i => i.Id == id);
+                .Where(x => x.UserId == userId && x.FriendId == friendId)
+                .ToList();
 
-            if (friendsToDelete == null)
+            foreach(FriendsModel element in friendsToDelete)
             {
-                return BadRequest();
+                _context.Friends.Remove(element);
+                _context.SaveChanges();
             }
-
-            _context.Friends.Remove(friendsToDelete);
-            _context.SaveChanges();
 
             return Ok();
         }

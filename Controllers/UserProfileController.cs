@@ -1,8 +1,11 @@
 ﻿using Iu_InstaShare_Api.Configurations;
+using Iu_InstaShare_Api.DTOs;
 using Iu_InstaShare_Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Iu_InstaShare_Api.Controllers
 {
@@ -32,13 +35,14 @@ namespace Iu_InstaShare_Api.Controllers
         [HttpGet("getById")]
         public ActionResult<UserProfileModel> getById(int id)
         {
-            var userProfileById = _context.UserProfiles
-                .FirstOrDefault(i => i.Id == id);
+            var userProfile = _context.UserProfiles.FirstOrDefault(i => i.Id == id);
 
-            if (userProfileById == null)
-                return BadRequest();
+            if (userProfile == null)
+            {
+                return NotFound();
+            }
 
-            return Ok(userProfileById);
+            return Ok(userProfile);
         }
 
         [HttpGet("getByEmail")]
@@ -53,22 +57,8 @@ namespace Iu_InstaShare_Api.Controllers
             return Ok(userProfileByEmail);
         }
 
-        [HttpPost("create")]
-        public ActionResult<UserProfileModel> create(UserProfileModel entity)
-        {
-            if (entity == null)
-            {
-                return BadRequest();
-            }
-
-            _context.UserProfiles.Add(entity);
-            _context.SaveChanges();
-
-            return Ok(entity);
-        }
-
         [HttpPost("update")]
-        public ActionResult<UserProfileModel> update(UserProfileModel entity)
+        public ActionResult<UserProfileModel> update(UserProfileChangeDto entity)
         {
             var userProfileToChange = _context.UserProfiles.Find(entity.Id);
 
@@ -77,6 +67,8 @@ namespace Iu_InstaShare_Api.Controllers
                 return BadRequest();
             }
 
+            using var hmac = new HMACSHA512();
+
             userProfileToChange.FirstName = entity.FirstName;
             userProfileToChange.LastName = entity.LastName;
             userProfileToChange.Email = entity.Email;
@@ -84,6 +76,8 @@ namespace Iu_InstaShare_Api.Controllers
             userProfileToChange.Zip = entity.Zip;
             userProfileToChange.City = entity.City;
             userProfileToChange.UpdatedAt = DateTime.Now;
+            userProfileToChange.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(entity.Password));
+            userProfileToChange.PasswordSalt = hmac.Key;
 
             _context.UserProfiles.Update(userProfileToChange);
             _context.SaveChanges();
@@ -100,6 +94,56 @@ namespace Iu_InstaShare_Api.Controllers
             if (userProfileToDelete == null)
             {
                 return BadRequest();
+            }
+
+            var booksOfUser = _context.Books
+                .Include(x => x.User)
+                .Where(x => x.UserId == id)
+                .ToList();
+
+            var lendsOfBook = new List<LendModel>();
+
+            foreach (BookModel element in booksOfUser)
+            {
+                var lend = _context.Lends.Where(x => x.Book.Id == element.Id).FirstOrDefault();
+                if (lend != null)
+                {
+                    lendsOfBook.Add(lend);
+                }
+            }
+
+            foreach (LendModel element in lendsOfBook)
+            {
+                _context.Lends.Remove(element);
+                _context.SaveChanges();
+            }
+
+            var lendsOfUser = _context.Lends
+                .Where(x => x.BorrowerId == id)
+                .ToList();
+
+            foreach (LendModel element in lendsOfUser)
+            {
+                _context.Lends.Remove(element);
+                _context.SaveChanges();
+            }
+
+            foreach (BookModel element in booksOfUser)
+            {
+                _context.Books.Remove(element);
+                _context.SaveChanges();
+            }
+
+            var friendsOfUser = _context.Friends
+                .Include(x => x.User)
+                .Include(x => x.Friend)
+                .Where(x => x.UserId == id || x.FriendId == id)
+                .ToList();
+
+            foreach (FriendsModel element in friendsOfUser)
+            {
+                _context.Friends.Remove(element);
+                _context.SaveChanges();
             }
 
             _context.UserProfiles.Remove(userProfileToDelete);

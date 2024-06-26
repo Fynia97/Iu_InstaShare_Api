@@ -27,9 +27,9 @@ namespace Iu_InstaShare_Api.Models
         public string Email { get; set; } = "";
         public virtual ICollection<FriendsModel>? Friends { get; set; }
 
-        public static UserProfileDto ToDto(UserProfileModel model, ITokenService tokenService)
+        public static UserTokenDto ToDto(UserProfileModel model, ITokenService tokenService)
         {
-            return new UserProfileDto
+            return new UserTokenDto
             {
                 Email = model.Email,
                 Token = tokenService.CreateToken(model)

@@ -22,7 +22,7 @@ namespace Iu_InstaShare_Api.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<UserProfileDto> Register(RegisterDto registerDto)
+        public ActionResult<UserTokenDto> Register(RegisterDto registerDto)
         {
             if (_context.UserProfiles.Any(x => x.Email.ToLower() == registerDto.Email.ToLower()))
             {
@@ -47,7 +47,7 @@ namespace Iu_InstaShare_Api.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<UserProfileDto> Login(LoginDto loginDto)
+        public ActionResult<UserTokenDto> Login(LoginDto loginDto)
         {
             var user = _context.UserProfiles.FirstOrDefault(x => x.Email == loginDto.Email);
 

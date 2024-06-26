@@ -1,4 +1,5 @@
-﻿using Iu_InstaShare_Api.Models;
+﻿using Iu_InstaShare_Api.DTOs;
+using Iu_InstaShare_Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Iu_InstaShare_Api.Configurations
@@ -39,6 +40,18 @@ namespace Iu_InstaShare_Api.Configurations
             .HasOne(f => f.User)
             .WithMany()
             .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<LendModel>()
+            .HasOne(f => f.Borrower)
+            .WithMany()
+            .HasForeignKey(f => f.BorrowerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<LendModel>()
+            .HasOne(f => f.Book)
+            .WithMany()
+            .HasForeignKey(f => f.BookId)
             .OnDelete(DeleteBehavior.Restrict);
 
         }
