@@ -28,9 +28,26 @@ namespace Iu_InstaShare_Api.Controllers
                 .Include(x => x.User)
                 .ToList();
 
-            var booksToGet = MapBookModelToBookDto(books);
-
-            return Ok(booksToGet);
+            var bookDtos = new List<BookDto>();
+            foreach (var element in books)
+            {
+                var bookDto = new BookDto
+                {
+                    Id = element.Id,
+                    ISBN = element.ISBN,
+                    Title = element.Title,
+                    Author = element.Author,
+                    Publisher = element.Publisher,
+                    PublishingYear = element.PublishingYear,
+                    CreatedAt = element.CreatedAt,
+                    UpdatedAt = element.UpdatedAt,
+                    LendOut = element.LendOut,
+                    UserId = element.UserId,
+                    Category = element.Category.ToString()
+                };
+                bookDtos.Add(bookDto);
+            }
+            return Ok(bookDtos);
         }
 
         [HttpGet("getAllByUserId")]
@@ -41,9 +58,26 @@ namespace Iu_InstaShare_Api.Controllers
                 .Where(x => x.UserId == userId)
                 .ToList();
 
-            var booksToGet = MapBookModelToBookDto(books);
-
-            return Ok(booksToGet);
+            var bookDtos = new List<BookDto>();
+            foreach (var element in books)
+            {
+                var bookDto = new BookDto
+                {
+                    Id = element.Id,
+                    ISBN = element.ISBN,
+                    Title = element.Title,
+                    Author = element.Author,
+                    Publisher = element.Publisher,
+                    PublishingYear = element.PublishingYear,
+                    CreatedAt = element.CreatedAt,
+                    UpdatedAt = element.UpdatedAt,
+                    LendOut = element.LendOut,
+                    UserId = element.UserId,
+                    Category = element.Category.ToString()
+                };
+                bookDtos.Add(bookDto);
+            }
+            return Ok(bookDtos);
         }
 
         [HttpGet("getById")]
@@ -82,7 +116,7 @@ namespace Iu_InstaShare_Api.Controllers
                 return BadRequest();
             }
 
-            BookCategoryEnum category = ParseBookEnum(entity.Category);
+            BookCategoryEnum category = (BookCategoryEnum)Enum.Parse(typeof(BookCategoryEnum), entity.Category);
 
             BookModel newBook = new BookModel()
             {
@@ -113,7 +147,7 @@ namespace Iu_InstaShare_Api.Controllers
                 return BadRequest();
             }
 
-            BookCategoryEnum category = ParseBookEnum(entity.Category);
+            BookCategoryEnum category = (BookCategoryEnum)Enum.Parse(typeof(BookCategoryEnum), entity.Category);
 
             bookToChange.ISBN = entity.ISBN;
             bookToChange.Title = entity.Title;
@@ -158,35 +192,5 @@ namespace Iu_InstaShare_Api.Controllers
 
             return Ok();
         }
-
-        private BookCategoryEnum ParseBookEnum(string bookCategory)
-        {
-            return (BookCategoryEnum)Enum.Parse(typeof(BookCategoryEnum), bookCategory);
-        }
-
-        public List<BookDto> MapBookModelToBookDto(List<BookModel> bookModels)
-        {
-            var bookDtos = new List<BookDto>();
-            foreach (var element in bookModels)
-            {
-                var bookDto = new BookDto
-                {
-                    Id = element.Id,
-                    ISBN = element.ISBN,
-                    Title = element.Title,
-                    Author = element.Author,
-                    Publisher = element.Publisher,
-                    PublishingYear = element.PublishingYear,
-                    CreatedAt = element.CreatedAt,
-                    UpdatedAt = element.UpdatedAt,
-                    LendOut = element.LendOut,
-                    UserId = element.UserId,
-                    Category = element.Category.ToString()
-                };
-                bookDtos.Add(bookDto);
-            }
-            return bookDtos;
-        }
-
     }
 }
