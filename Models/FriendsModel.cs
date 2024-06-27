@@ -28,7 +28,7 @@ namespace Iu_InstaShare_Api.Models
                 Id = model.Id,
                 UserId = model.UserId,
                 FriendId = model.FriendId,
-                Status = model.Status
+                Status = model.Status.ToString()
             };
         }
     }
