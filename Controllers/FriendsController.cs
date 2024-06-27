@@ -44,7 +44,7 @@ namespace Iu_InstaShare_Api.Controllers
             var friendsList = _context.Friends
             .Include(x => x.Friend)
             .Include(x => x.User)
-            .Where(x => x.UserId == userId && x.Status != FriendsStatusEnum.DECLINED)
+            .Where(x => x.UserId == userId)
             .ToList();
 
             var friendsDtoList = friendsList.Select(f => FriendsModel.ToDto(f)).ToList();
