@@ -10,15 +10,15 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 //for cors
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        builder =>
-            {
-                builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-            });
-});
+//var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(name: MyAllowSpecificOrigins,
+//        builder =>
+//            {
+//                builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+//            });
+//});
 
 //for db
 builder.Services.AddDbContext<DataDbContext>(options =>
@@ -81,7 +81,8 @@ if (app.Environment.IsDevelopment())
 }
 
 //for cors
-app.UseCors(MyAllowSpecificOrigins);
+//app.UseCors(MyAllowSpecificOrigins);
+app.UseCorsMiddleware();
 
 app.UseHttpsRedirection();
 
