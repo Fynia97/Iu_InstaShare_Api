@@ -75,6 +75,7 @@ namespace Iu_InstaShare_Api.Controllers
             userProfileToChange.Street = entity.Street;
             userProfileToChange.Zip = entity.Zip;
             userProfileToChange.City = entity.City;
+            userProfileToChange.PhoneNumber = entity.PhoneNumber;
             userProfileToChange.UpdatedAt = DateTime.Now;
             userProfileToChange.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(entity.Password));
             userProfileToChange.PasswordSalt = hmac.Key;

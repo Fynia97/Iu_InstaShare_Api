@@ -18,6 +18,7 @@ namespace Iu_InstaShare_Api.Models
         public string Street { get; set; } = "";
         public string Zip { get; set; } = "";
         public string City { get; set; } = "";
+        public string PhoneNumber { get; set; } = "";
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = null;
