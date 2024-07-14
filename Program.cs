@@ -2,6 +2,7 @@ using Iu_InstaShare_Api.Configurations;
 using Iu_InstaShare_Api.Interfaces;
 using Iu_InstaShare_Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -22,7 +23,7 @@ builder.Services.AddCors(options =>
 
 //for db
 builder.Services.AddDbContext<DataDbContext>(options =>
-{
+    {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
@@ -80,10 +81,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+
 //for cors
 app.UseCors(MyAllowSpecificOrigins);
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

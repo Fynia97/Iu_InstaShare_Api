@@ -4,7 +4,6 @@
     {
         REQUESTMADE,
         ACCEPTED,
-        DECLINED,
         CLOSED
     }
 }
