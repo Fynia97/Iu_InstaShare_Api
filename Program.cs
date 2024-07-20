@@ -1,5 +1,6 @@
 using Iu_InstaShare_Api.Configurations;
 using Iu_InstaShare_Api.Interfaces;
+using Iu_InstaShare_Api.MockDatas;
 using Iu_InstaShare_Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -22,11 +23,14 @@ builder.Services.AddCors(options =>
 });
 
 //for db
-builder.Services.AddDbContext<DataDbContext>(options =>
-    {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+//builder.Services.AddDbContext<DataDbContext>(options =>
+//    {
+//        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+//    });
 
+builder.Services.AddDbContext<DataDbContext>();
+var context = builder.Services.BuildServiceProvider().GetRequiredService<DataDbContext>();
+MockSeeds.Seeds(context);
 
 // Add services to the container.
 
@@ -80,8 +84,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.Use(async (context, next) =>
+    {
+        await next();
+        if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
+        {
+            context.Request.Path = "/index.html"; await next();
+        }
+    });
+}
+
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 //for cors
 app.UseCors(MyAllowSpecificOrigins);

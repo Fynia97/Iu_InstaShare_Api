@@ -13,10 +13,12 @@ namespace Iu_InstaShare_Api.Configurations
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=InstaShare;Integrated Security=True");
-            }
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //    optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=InstaShare;Integrated Security=True");
+            //}
+
+            optionsBuilder.UseInMemoryDatabase("DatabaseInstaShare");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
